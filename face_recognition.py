@@ -7,6 +7,15 @@ from PIL import Image, ImageTk
 from datetime import datetime
 import csv
 import json
+import sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS  # PyInstaller temp folder
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class FaceRecognitionApp:
     def __init__(self, window):
@@ -31,7 +40,13 @@ class FaceRecognitionApp:
         self.load_attendance_data()
         
         # Initialize face detector and recognizer
-        self.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        if getattr(sys, 'frozen', False):
+            # Running inside PyInstaller exe: load cascade from bundled file
+            cascade_path = resource_path("haarcascade_frontalface_default.xml")
+        else:
+            # Running as normal script: use OpenCV's built-in path
+            cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+        self.face_cascade = cv2.CascadeClassifier(cascade_path)
         self.face_recognizer = cv2.face.LBPHFaceRecognizer_create()
         
         # Create main frame
@@ -231,7 +246,7 @@ class FaceRecognitionApp:
             "WIN_20250617_23_14_59_Pro.jpg": "shailesh"
         }
         
-        images_dir = "images"
+        images_dir = resource_path("images")
         for filename in os.listdir(images_dir):
             if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                 image_path = os.path.join(images_dir, filename)
