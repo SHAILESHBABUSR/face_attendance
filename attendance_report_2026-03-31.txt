@@ -1,0 +1,13 @@
+ATTENDANCE REPORT - 2026-03-31
+==================================================
+
+Generated on: 2026-03-31 15:44:52
+
+ATTENDANCE LIST:
+------------------------------
+
+SUMMARY:
+------------------------------
+Total Present: 0
+Total Known People: 4
+Attendance Rate: 0.0%
